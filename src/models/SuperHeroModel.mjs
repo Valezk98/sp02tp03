@@ -6,7 +6,6 @@ import mongoose from 'mongoose';
 
 const superHeroSchema = new mongoose.Schema(
     {
-        id: { type: Number, min: 0, required: true},
         nombreSuperheroe: {type: String, required: true},
         nombreReal: {type: String, required: true},
         edad: { type: Number, min: 0},
@@ -22,11 +21,11 @@ const superHeroSchema = new mongoose.Schema(
 
 //2 - Crear el model y pasarle el nombre del modelo, el schema y el nombre de la colección como parametros
 
-const superHeroModel = mongoose.model('Superheroes', superHeroSchema, 'Grupo-29');
+const SuperHero = mongoose.model('Superheroes', superHeroSchema, 'Grupo-29');
 
 //3 - Exportar la constante con el modelo
 
-export default superHeroModel
+export default SuperHero
 /* 
     Definir el modelo de datos asegura que cada documento de la colección de superheroes siga una estructura consistente, lo que permite tener un control de calidad sobre los datos.
 

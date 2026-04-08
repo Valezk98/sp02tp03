@@ -8,10 +8,6 @@ class SuperHeroRepository extends IRepository{
         return await SuperHero.findById(id)
     };
 
-    async obtenerTodos(){
-        return await SuperHero.find({});
-    };
-
     async buscarPorAtributo(atributo, valor){
         return await SuperHero.find(
             {
@@ -26,6 +22,28 @@ class SuperHeroRepository extends IRepository{
             // planetaOrigen: "Tierra",
             //$expr: {$gt: [{$size : "$poderes"}, 3]} // Por las dudas👹
         });
+    }
+
+//SP 3 TP 1
+
+    async obtenerTodos(){
+        return await SuperHero.find({});
+    };
+
+    async crearSuperheroe(nuevoSuperheroe){
+        return SuperHero.create(nuevoSuperheroe);
+    }
+
+    async actualizarSuperheroePorID(id, superheroeActualizado, options = { new : true}){
+        return SuperHero.findByIdAndUpdate(id, superheroeActualizado, options);
+    }
+
+    async borrarSuperheroePorID(id, superheroeBorrado){
+        return SuperHero.findByIdAndDelete(id, superheroeBorrado)
+    }
+
+    async borrarSuperheroePorNombre(nombreSuperheroe){
+        return SuperHero.findOneAndDelete({nombreSuperheroe})
     }
 }
 

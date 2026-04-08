@@ -15,7 +15,6 @@ mongoDbCon();
 app.use('/api', router)
 
 //Para las rutas no encontradas
-
 app.use((req,res)=>{
     res.status(404).send(
         {
@@ -23,6 +22,7 @@ app.use((req,res)=>{
         }
     )
 })
+
 
 //Iniciar el servidor
 

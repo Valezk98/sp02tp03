@@ -1,27 +1,8 @@
-import { obtenerSuperheroes, obtenerSuperheroesMayoresDe30, obtenerSuperheroesPorId, obtenerSuperheroesPorAtributo } from "../services/superheroesService.mjs";
+import { crearSuperheroe, obtenerSuperheroes, obtenerSuperheroesMayoresDe30, obtenerSuperheroesPorId, obtenerSuperheroesPorAtributo, actualizarSuperheroePorID, borrarSuperheroePorID, borrarSuperheroePorNombre } from "../services/superheroesService.mjs";
 import { renderizarListaSuperheroes, renderizarSuperheroes } from "../views/responseView.mjs";
 
 
-//###################################### TODOS LOS SUPERHEROES ###########################################
-
-export async function obtenerSuperHeroesController(req,res){
-    try {
-        const superheroes = await obtenerSuperheroes()
-
-        const superheroesFormateados = renderizarListaSuperheroes(superheroes);
-        res.status(200).json(superheroesFormateados);
-
-    } catch (error) {
-        res.status(500).send(
-            {
-                mensaje: 'Error al obtener los datos', 
-                error: error.message
-            })
-    }
-}
-
-
-//###################################### MAYORES DE 30 ####################################################
+//###################################### Mayores de 30 ####################################################
 
 
 export async function obtenerMayoresDe30Cotroller(req, res){
@@ -29,8 +10,7 @@ export async function obtenerMayoresDe30Cotroller(req, res){
         const superheroesMas30 = await obtenerSuperheroesMayoresDe30()
 
         if(superheroesMas30.length === 0){
-            res.status(404).send('No hay superheroes mayores de 30 en la lista')
-            return;
+            res.status(404).send('No hay superheroes mayores de 30 en la lista');
         }
 
         const superheroesFormateados = renderizarListaSuperheroes(superheroesMas30)
@@ -45,7 +25,7 @@ export async function obtenerMayoresDe30Cotroller(req, res){
     }
 }
 
-//###################################### POR ID ####################################################
+//###################################### Buscar por ID ####################################################
 
 export async function obtenerPorIdController(req,res){
     try {
@@ -70,7 +50,8 @@ export async function obtenerPorIdController(req,res){
     }
 }
 
-//###################################### POR ATRIBUTO #################################################
+
+//###################################### Por Atributo #################################################
 
 export async function obtenerPorAtributoController(req, res){
     try {
@@ -89,14 +70,119 @@ export async function obtenerPorAtributoController(req, res){
     } catch (error) {
         res.status(500).send(
             {
-                mensaje: "Error al obtener lso datos",
-                error: error.message
+                mensaje: "Error al obtener los datos"
             }
         )
     }
 
 }
 
+//SP 3 TP 1
+
+//###################################### Todos los superheroes ###########################################
+
+export async function obtenerSuperHeroesController(req,res){
+    try {
+        const superheroes = await obtenerSuperheroes()
+
+        const superheroesFormateados = renderizarListaSuperheroes(superheroes);
+        res.status(200).json(superheroesFormateados);
+
+    } catch (error) {
+        res.status(500).send(
+            {
+                mensaje: 'Error al obtener los datos', 
+                error: error.message
+            })
+    }
+}
+
+//###################################### Crear un superheroe ####################################################
+
+export async function crearSuperheroeController(req, res){
+    try {
+        const nuevoSuperheroe = await crearSuperheroe(req.body);
+        const superheroesFormateados = renderizarSuperheroes(nuevoSuperheroe);
+
+        return res.status(201).json(superheroesFormateados);
+        
+    } catch (error) {
+        res.status(500).send({
+            mensaje: 'No se pudo crear',
+            error: error.message
+        })
+        
+    }
+}
+
+
+//###################################### Actualizar (por ID) #################################################
+
+export async function actualizarSuperheroePorIDController(req, res){
+    try {
+        const id = req.params.id;
+        const superheroeEditado = await actualizarSuperheroePorID(id, req.body, {new: true});
+
+        if(!superheroeEditado){
+            res.status(404).json({
+                mensaje: 'Error, no se encuentra el superheroe con esa id',
+                error: error.message
+            })
+        }
+
+        res.status(200).json(superheroeEditado)
+
+    } catch (error) {
+        res.status(500).json({
+            mensaje: 'Error interno del servidor'
+        })
+    }
+} 
+
+
+//###################################### Borrar por ID #################################################
+
+export async function borrarSuperheroePorIDController(req, res){
+    try {
+        const id = req.params.id;
+
+        const superheroeBorrado = await borrarSuperheroePorID(id, req.body)
+
+        if(!superheroeBorrado){
+            return res.status(404).json({
+                mensaje: 'No se encontró el superheroe a borrar',
+                error: error.message
+            })}
+            
+        res.status(200).json(superheroeBorrado)
+    } catch (error) {
+        res.status(500).json({
+            mensaje: 'Error interno del servidor'
+        })
+    }
+}
+
+//###################################### Borrar por Nombre #################################################
+
+export async function borrarSuperheroePorNombreController(req, res){
+    try {
+        const { nombreSuperheroe } = req.params;
+
+        const superheroeBorrado = await borrarSuperheroePorNombre(nombreSuperheroe)
+
+        if(!superheroeBorrado){
+            return res.status(404).json({
+                mensaje: 'Superheroe a borrar no encontrado'
+            })
+        }
+
+        res.status(200).json(superheroeBorrado)
+    } catch (error) {
+        res.status(500).json({
+            mensaje: 'Error interno del servidor'
+        });
+    }
+}
 
 /*
     La capa de los controladores gestiona las solicitudes del cliente y llama a la capa de SERVICIOS para hacer las operaciones, asegura la organización del codigo al usar funciones especificas para cada endpoint

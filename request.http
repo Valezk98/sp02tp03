@@ -1,0 +1,50 @@
+//Acá hacia las pruebas iniciales
+
+###
+GET http://localhost:3000/api/superheroes
+
+###
+
+GET http://localhost:3000/api/superheroes/mayoresDe30
+
+###
+
+GET http://localhost:3000/api/superheroes/planetaOrigen/Asgard
+
+###
+GET http://localhost:3000/api/superheroes/edad/40
+
+###
+GET http://localhost:3000/api/superheroes/69b3530e31a11b8c107dc592
+
+###
+
+POST http://localhost:3000/api/superheroes/crear
+Content-Type: application/json
+
+{
+    "nombreSuperheroe": "Agente-Venom",
+    "nombreReal": "Eddie Brook",
+    "edad": 30,
+    "planetaOrigen": "Tierra",
+    "debilidad": "Altas frecuencias de sonido",
+    "poderes": ["Agilidad", "Fuerza sobrehumana"],
+    "aliados": "Spiderman",
+    "enemigos": "Antivenom",
+    "creador": "Jorge"    
+}
+
+###
+
+PUT http://localhost:3000/api/superheroes/actualizarPorId/69bc84967ca44e2ccd17b46d
+Content-Type: application/json
+
+{
+    "edad": 41
+}
+
+###
+DELETE http://localhost:3000/api/superheroes/borrarsuperheroeporid/69d6d7a4e7f4d4f2a84c7d50
+
+###
+DELETE http://localhost:3000/api/superheroes/borrarsuperheroepornombre/Agente-Venom
